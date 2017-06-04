@@ -6,6 +6,7 @@ import android.net.Uri;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -13,7 +14,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Timestamp;
 import java.util.ArrayList;
 import java.security.MessageDigest;
-import java.util.Calendar;
 import java.util.Date;
 
 import okhttp3.OkHttpClient;
@@ -32,18 +32,16 @@ public class utils {
 
     private static final String MARVEL_BASE_URL = "https://gateway.marvel.com:443/v1/public/";
     private static final String MARVEL_APIKEY_QUERY_PARAM = "apikey";
+    private static final String MARVEL_TS_QUERY_PARAM = "ts";
+    private static final String MARVEL_HASH_QUERY_PARAM = "hash";
+
 
     private static final OkHttpClient mHTTPClient = new OkHttpClient();
+    private static final DigestUtils digestUtils = new DigestUtils();
 
 
-    private static String calculateHash (String ts) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
+    private static String calculateHash () {
+        return digestUtils.md5Hex(Long.toString(System.currentTimeMillis()) + MARVEL_PRIVATE_API_KEY + MARVEL_PUBLIC_API_KEY);
     }
 
     public static class MarvelItem implements Serializable {
@@ -59,8 +57,6 @@ public class utils {
         public static JSONArray stories;
         public static JSONArray events;
         public static JSONArray creators;
-
-
 
     }
 
@@ -78,10 +74,14 @@ public class utils {
         }
     }
 
+
+
     public static String buildMarvelURL(String category) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category)
-                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_API_KEY)
+                .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
+                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
+                .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
                 .build()
                 .toString();
     }
@@ -89,7 +89,9 @@ public class utils {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category)
                 .appendPath(id)
-                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_API_KEY)
+                .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
+                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
+                .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
                 .build()
                 .toString();
     }
@@ -98,7 +100,9 @@ public class utils {
                 .appendPath(category1)
                 .appendPath(id)
                 .appendPath(category2)
-                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_API_KEY)
+                .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
+                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
+                .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
                 .build()
                 .toString();
     }
