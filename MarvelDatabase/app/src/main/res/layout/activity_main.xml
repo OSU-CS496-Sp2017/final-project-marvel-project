@@ -18,31 +18,37 @@
         android:id="@+id/btn_characters"
         android:text="Characters"
         android:layout_width="250dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="doCharacters"/>
     <Button
         android:id="@+id/btn_comics"
         android:text="Comics"
         android:layout_width="250dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="doComics"/>
     <Button
         android:id="@+id/btn_creators"
         android:text="Creators"
         android:layout_width="250dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="doCreators"/>
     <Button
         android:id="@+id/btn_events"
         android:text="Events"
         android:layout_width="250dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="doEvents"/>
     <Button
         android:id="@+id/btn_series"
         android:text="Series"
         android:layout_width="250dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="doSeries"/>
     <Button
         android:id="@+id/btn_stories"
         android:text="Stories"
         android:layout_width="250dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:onClick="doStories"/>
 
 </LinearLayout>

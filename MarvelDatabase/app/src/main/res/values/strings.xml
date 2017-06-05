@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Marvel Database</string>
+    <string name="loading_error_message">We couldn\'t load your query. Please check your internet connection and try again.</string>
 </resources>

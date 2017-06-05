@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.MarvelItemViewHolder> {
 
     private OnMarvelItemClickListener mMarvelItemClickListener;
-    private ArrayList<utils.MarvelItem> mMarvelItems;
+    private ArrayList<? extends Object> mMarvelItems;
 
 
     public interface OnMarvelItemClickListener {
@@ -46,7 +46,7 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
 
     @Override
     public void onBindViewHolder(MarvelItemViewHolder holder, int position) {
-        holder.bind(mMarvelItems.get(position));
+        holder.bind( (utils.MarvelCharacterItem) (mMarvelItems.get(position)));
     }
 
 
@@ -58,7 +58,7 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
             itemView.setOnClickListener(this);
         }
 
-        public void bind (utils.MarvelItem marvelItem) {
+        public void bind (utils.MarvelCharacterItem marvelItem) {
             mMarvelItemTV.setText(marvelItem.name);
         }
 
