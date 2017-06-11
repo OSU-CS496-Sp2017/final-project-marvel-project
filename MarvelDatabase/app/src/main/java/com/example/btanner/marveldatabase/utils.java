@@ -4,6 +4,7 @@ import android.net.ParseException;
 import android.net.Uri;
 import android.util.Log;
 
+import org.apache.commons.codec.binary.Hex;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +47,8 @@ public class utils {
 
 
     private static String calculateHash () {
-        return digestUtils.md5Hex(Long.toString(System.currentTimeMillis()) + MARVEL_PRIVATE_API_KEY + MARVEL_PUBLIC_API_KEY);
+        String hash = new String(Hex.encodeHex(digestUtils.md5(Long.toString(System.currentTimeMillis()) + MARVEL_PRIVATE_API_KEY + MARVEL_PUBLIC_API_KEY)));
+        return hash;
     }
 
     public static class MarvelCharacterItem implements Serializable {
