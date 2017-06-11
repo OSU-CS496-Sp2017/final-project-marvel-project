@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.btanner.marveldatabase.utils;
+
+
 import java.util.ArrayList;
 
 /**
@@ -15,11 +18,11 @@ import java.util.ArrayList;
 public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.MarvelItemViewHolder> {
 
     private OnMarvelItemClickListener mMarvelItemClickListener;
-    private ArrayList<? extends Object> mMarvelItems;
+    private ArrayList<utils.MarvelCharacterItem> mMarvelItems;
 
 
     public interface OnMarvelItemClickListener {
-        void onMarvellItemClick(utils.MarvelItem marvelItem);
+        void onMarvellItemClick(utils.MarvelCharacterItem marvelItem);
     }
 
     public MarvelRVAdapter (OnMarvelItemClickListener clickListener) {
@@ -50,7 +53,7 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
     }
 
 
-    class MarvelItemViewHolder extends RecyclerView.ViewHolder {
+    class MarvelItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mMarvelItemTV;
         public MarvelItemViewHolder(View itemView) {
             super(itemView);
@@ -63,7 +66,7 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
         }
 
         public void onClick(View v) {
-            utils.MarvelItem marvelItem = mMarvelItems.get(getAdapterPosition());
+            utils.MarvelCharacterItem marvelItem = mMarvelItems.get(getAdapterPosition());
             mMarvelItemClickListener.onMarvellItemClick(marvelItem);
         }
     }
