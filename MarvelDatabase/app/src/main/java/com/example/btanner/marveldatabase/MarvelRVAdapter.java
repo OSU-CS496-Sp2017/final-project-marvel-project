@@ -19,7 +19,7 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
 
 
     public interface OnMarvelItemClickListener {
-        void onMarvellItemClick(utils.MarvelItem marvelItem);
+        //void onMarvellItemClick(utils.MarvelItem marvelItem);
     }
 
     public MarvelRVAdapter (OnMarvelItemClickListener clickListener) {
@@ -55,7 +55,7 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
         public MarvelItemViewHolder(View itemView) {
             super(itemView);
             mMarvelItemTV = (TextView)itemView.findViewById(R.id.tv_marvel_rc_item);
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
         }
 
         public void bind (utils.MarvelCharacterItem marvelItem) {
@@ -63,8 +63,8 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
         }
 
         public void onClick(View v) {
-            utils.MarvelItem marvelItem = mMarvelItems.get(getAdapterPosition());
-            mMarvelItemClickListener.onMarvellItemClick(marvelItem);
+            //utils.MarvelItem marvelItem = mMarvelItems.get(getAdapterPosition());
+           // mMarvelItemClickListener.onMarvellItemClick(marvelItem);
         }
     }
 
