@@ -6,28 +6,54 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class CategoryListResults extends AppCompatActivity
-    implements LoaderManager.LoaderCallbacks<String> {
+public class CategoryListResults extends AppCompatActivity implements MarvelRVAdapter.OnMarvelItemClickListener, LoaderManager.LoaderCallbacks<String> {
 
     private static final String TAG = CategoryListResults.class.getSimpleName();
     private static final String SEARCH_URL_KEY = "marvelSearchURL";
     private static final int MARVEL_SEARCH_LOADER_ID = 0;
 
+    private TextView mLoadingErrorMessageTV;
+    private ProgressBar mLoadingIndicatorPB;
+    private RecyclerView mMarvelItemsRV;
+    private MarvelRVAdapter mMarvelAdapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_list_results);
+        setContentView(R.layout.activity_listing);
 
         Intent intent = getIntent();
         String category = intent.getStringExtra(MainActivity.CATEGORY_MESSAGE);
 
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
         makeApiCall(category);
+
+        mLoadingErrorMessageTV = (TextView) findViewById(R.id.tv_loading_error_message);
+        mLoadingIndicatorPB = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        mMarvelItemsRV = (RecyclerView) findViewById(R.id.rv_marvel_items);
+
+        mMarvelAdapter = new MarvelRVAdapter(this);
+        mMarvelItemsRV.setAdapter(mMarvelAdapter);
+        mMarvelItemsRV.setLayoutManager(new LinearLayoutManager(this));
+        mMarvelItemsRV.setHasFixedSize(true);
+
+    }
+
+    @Override
+    public void onMarvellItemClick(utils.MarvelCharacterItem marvelItem) {
+
     }
 
     public void makeApiCall(String category) {
@@ -90,19 +116,24 @@ public class CategoryListResults extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         Log.d(TAG, "AsyncTaskLoader's onLoadFinished called");
-        //hide progressBar
-
-        if(data != null) {
-            //Parse Data
-            //Update Data on adapter
-        } else {
-            //Error messages
+        mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
+        if (data != null) {
+            mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
+            mMarvelItemsRV.setVisibility(View.VISIBLE);
+            ArrayList<utils.MarvelCharacterItem> marvelItems = utils.parseCharactersJSON(data);
+            mMarvelAdapter.updateMarvelItems(marvelItems);
         }
+        else {
+            mMarvelItemsRV.setVisibility(View.INVISIBLE);
+            mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
     public void onLoaderReset(Loader<String> loader) {
 
     }
+
 
 }

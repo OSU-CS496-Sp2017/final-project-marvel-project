@@ -15,15 +15,20 @@ import java.util.ArrayList;
 public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.MarvelItemViewHolder> {
 
     private OnMarvelItemClickListener mMarvelItemClickListener;
-    private ArrayList<? extends Object> mMarvelItems;
+    private ArrayList<utils.MarvelCharacterItem> mMarvelItems;
 
 
     public interface OnMarvelItemClickListener {
-        //void onMarvellItemClick(utils.MarvelItem marvelItem);
+        void onMarvellItemClick(utils.MarvelCharacterItem marvelItem);
     }
 
     public MarvelRVAdapter (OnMarvelItemClickListener clickListener) {
         mMarvelItemClickListener = clickListener;
+    }
+
+    public void updateMarvelItems(ArrayList<utils.MarvelCharacterItem> marvelItems) {
+        mMarvelItems = marvelItems;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -50,12 +55,12 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
     }
 
 
-    class MarvelItemViewHolder extends RecyclerView.ViewHolder {
+    class MarvelItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView mMarvelItemTV;
         public MarvelItemViewHolder(View itemView) {
             super(itemView);
             mMarvelItemTV = (TextView)itemView.findViewById(R.id.tv_marvel_rc_item);
-            //itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         public void bind (utils.MarvelCharacterItem marvelItem) {
@@ -63,8 +68,8 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
         }
 
         public void onClick(View v) {
-            //utils.MarvelItem marvelItem = mMarvelItems.get(getAdapterPosition());
-           // mMarvelItemClickListener.onMarvellItemClick(marvelItem);
+            utils.MarvelCharacterItem marvelItem = (utils.MarvelCharacterItem) mMarvelItems.get(getAdapterPosition());
+            mMarvelItemClickListener.onMarvellItemClick(marvelItem);
         }
     }
 

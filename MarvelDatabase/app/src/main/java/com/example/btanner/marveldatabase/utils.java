@@ -65,6 +65,7 @@ public class utils {
         public static String detailURL;
         public static String wikiURL;
         public static String comiclinkURL;
+        public static String displayName;
 
 
     }
@@ -101,6 +102,7 @@ public class utils {
         public static JSONObject characters;
         public static JSONObject stories;
         public static JSONObject events;
+        public static String displayName;
     }
 
     public static class MarvelSeriesItem implements Serializable {
@@ -121,6 +123,7 @@ public class utils {
         public static JSONObject creators;
         public static JSONObject next;
         public static JSONObject previous;
+        public static String displayName;
     }
 
     public static class MarvelStoryItem implements Serializable {
@@ -138,6 +141,7 @@ public class utils {
         public static JSONObject creators;
         public static String originalIssueUri;
         public static String originalIssueName;
+        public static String displayName;
 
     }
 
@@ -156,6 +160,7 @@ public class utils {
         public static JSONObject stories;
         public static JSONObject comics;
         public static JSONObject events;
+        public static String displayName;
     }
 
     public static class MarvelEventItem implements Serializable {
@@ -177,6 +182,7 @@ public class utils {
         public static String nextName;
         public static String previousURI;
         public static String previousName;
+        public static String displayName;
     }
 
 
@@ -231,6 +237,7 @@ public class utils {
     public static ArrayList<MarvelCharacterItem> parseCharactersJSON(String marvelJSON) {
         try {
             JSONObject marvelObj = new JSONObject(marvelJSON);
+            marvelObj = marvelObj.getJSONObject("data");
             JSONArray marvelList = marvelObj.getJSONArray("results");
             ArrayList<MarvelCharacterItem> marvelItemsList = new ArrayList<MarvelCharacterItem>();
             SimpleDateFormat dateParser = new SimpleDateFormat(MARVEL_DATE_FORMAT);
@@ -244,7 +251,7 @@ public class utils {
                 marvelItem.id = marvelListItem.getInt("id");
                 marvelItem.name = marvelListItem.getString("name");
                 marvelItem.description = marvelListItem.getString("description");
-                marvelItem.modified = dateParser.parse(marvelListItem.getString("modified"));
+                //marvelItem.modified = dateParser.parse(marvelListItem.getString("modified"));
                 marvelItem.description = marvelListItem.getString("description");
                 tempJSONobj = marvelListItem.getJSONObject("thumbnail");
                 marvelItem.thumbnailPath = tempJSONobj.getString("path") + "." + tempJSONobj.getString("extension");
@@ -269,14 +276,15 @@ public class utils {
                         Log.d(TAG, "Found unexpected type in urls when parsing character JSON");
                     }
                 }
+                marvelItem.displayName = marvelItem.name;
                 marvelItemsList.add(marvelItem);
             }
             return marvelItemsList;
         }
-        catch (java.text.ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+//        catch (java.text.ParseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
         catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -362,6 +370,7 @@ public class utils {
                 marvelItem.characters = marvelListItem.getJSONObject("characters");
                 marvelItem.stories = marvelListItem.getJSONObject("stories");
                 marvelItem.events = marvelListItem.getJSONObject("events");
+                marvelItem.displayName = marvelItem.title;
                 marvelItemsList.add(marvelItem);
             }
             return marvelItemsList;
@@ -415,6 +424,10 @@ public class utils {
                 marvelItem.stories = marvelListItem.getJSONObject("stories");
                 marvelItem.comics = marvelListItem.getJSONObject("comics");
                 marvelItem.events = marvelListItem.getJSONObject("events");
+                marvelItem.next = marvelListItem.getJSONObject("next");
+                marvelItem.previous = marvelListItem.getJSONObject("previous");
+
+                marvelItem.displayName = marvelItem.title;
                 marvelItemsList.add(marvelItem);
             }
             return marvelItemsList;
@@ -459,6 +472,7 @@ public class utils {
                 tempJSONobj = marvelListItem.getJSONObject("originalIssue");
                 marvelItem.originalIssueUri = tempJSONobj.getString("resourceURI");
                 marvelItem.originalIssueName = tempJSONobj.getString("name");
+                marvelItem.displayName = marvelItem.title;
                 marvelItemsList.add(marvelItem);
             }
             return marvelItemsList;
@@ -511,6 +525,7 @@ public class utils {
                         Log.d(TAG, "Found unexpected type in urls when parsing creators JSON");
                     }
                 }
+                marvelItem.displayName = marvelItem.fullName;
                 marvelItemsList.add(marvelItem);
             }
             return marvelItemsList;
@@ -570,6 +585,7 @@ public class utils {
                 tempJSONobj = marvelListItem.getJSONObject("previous");
                 marvelItem.previousURI = tempJSONobj.getString("resourceURI");
                 marvelItem.previousName = tempJSONobj.getString("name");
+                marvelItem.displayName = marvelItem.title;
                 marvelItemsList.add(marvelItem);
             }
             return marvelItemsList;
