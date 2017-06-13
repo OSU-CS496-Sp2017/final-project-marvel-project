@@ -52,7 +52,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     }
 
     @Override
-    public void onMarvellItemClick(utils.MarvelCharacterItem marvelItem) {
+    public void onMarvellItemClick(utils.MarvelItem marvelItem) {
 
     }
 
@@ -120,7 +120,8 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         if (data != null) {
             mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
             mMarvelItemsRV.setVisibility(View.VISIBLE);
-            ArrayList<utils.MarvelCharacterItem> marvelItems = utils.parseCharactersJSON(data);
+            ArrayList<utils.MarvelItem> marvelItems = utils.parseMarvelItemJSON(data);
+            //Log.d(TAG, "Items in parse JSON: " + Integer.toString(marvelItems.size()));
             mMarvelAdapter.updateMarvelItems(marvelItems);
         }
         else {
