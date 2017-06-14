@@ -29,6 +29,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     private String mCategory;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +122,6 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         if (data != null) {
             mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
             mMarvelItemsRV.setVisibility(View.VISIBLE);
-
             if(utils.parseMarvelItemJSON(data) == null){
                 Log.d(TAG, "null parse JSON");
             }
@@ -143,6 +143,5 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     public void onLoaderReset(Loader<String> loader) {
 
     }
-
 
 }

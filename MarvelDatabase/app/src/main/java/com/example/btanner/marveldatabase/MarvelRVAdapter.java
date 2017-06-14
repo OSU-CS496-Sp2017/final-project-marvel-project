@@ -17,7 +17,9 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
 
     private OnMarvelItemClickListener mMarvelItemClickListener;
     private ArrayList<utils.MarvelItem> mMarvelItems;
+
     private String mCategory;
+
 
 
     public interface OnMarvelItemClickListener {

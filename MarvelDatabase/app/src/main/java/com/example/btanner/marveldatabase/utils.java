@@ -302,11 +302,14 @@ public class utils {
             JSONArray marvelList = marvelObj.getJSONArray("results");
             ArrayList<MarvelItem> marvelItemsList = new ArrayList<MarvelItem>();
             SimpleDateFormat dateParser = new SimpleDateFormat(MARVEL_DATE_FORMAT);
+
             JSONObject tempJSONobj;
             JSONArray tempJSONarr;
 
             for (int i = 0; i < marvelList.length(); ++i) {
+
                 MarvelItem marvelItem = new MarvelItem();   //problem here
+
                 JSONObject marvelListItem = marvelList.getJSONObject(i);
                 if (marvelListItem.has("id")) {
                     marvelItem.id = marvelListItem.getInt("id");
@@ -354,10 +357,10 @@ public class utils {
                     marvelItem.endYear = marvelListItem.getInt("endYear");
                 }
                 if (marvelListItem.has("start")) {
-                    //marvelItem.start = dateParser.parse(marvelListItem.getString("start"));
+                    marvelItem.start = dateParser.parse(marvelListItem.getString("start"));
                 }
                 if (marvelListItem.has("end")) {
-                    //marvelItem.end = dateParser.parse(marvelListItem.getString("end"));
+                    marvelItem.end = dateParser.parse(marvelListItem.getString("end"));
                 }
                 if (marvelListItem.has("rating")) {
                     marvelItem.rating = marvelListItem.getString("rating");
@@ -468,35 +471,34 @@ public class utils {
                         marvelItem.seriesName = tempJSONobj.getString("name");
                     }
                 }
+                if (marvelListItem.has("thumbnail")) {
+                    tempJSONobj = marvelListItem.getJSONObject("thumbnail");
+                    if (tempJSONobj.has("path") && tempJSONobj.has("extension")) {
+                        marvelItem.thumbnailPath = tempJSONobj.getString("path") + "." + tempJSONobj.getString("extension");
+                    }
+                    if (tempJSONobj.has("images")) {
+                        marvelItem.images = marvelListItem.getJSONArray("images");
+                    }
+                }
 
-//                if (marvelListItem.has("thumbnail")) {
-//                    tempJSONobj = marvelListItem.getJSONObject("thumbnail");
-//                    if (tempJSONobj.has("path") && tempJSONobj.has("extension")) {
-//                        marvelItem.thumbnailPath = tempJSONobj.getString("path") + "." + tempJSONobj.getString("extension");
-//                    }
-//                    if (tempJSONobj.has("images")) {
-//                        marvelItem.images = marvelListItem.getJSONArray("images");
-//                    }
-//                }
-
-//                if (marvelListItem.has("next")) {
-//                    tempJSONobj = marvelListItem.getJSONObject("next");
-//                    if (tempJSONobj.has("resourceURI")) {
-//                        marvelItem.nextURI = tempJSONobj.getString("resourceURI");
-//                    }
-//                    if (tempJSONobj.has("name")) {
-//                        marvelItem.nextName = tempJSONobj.getString("name");
-//                    }
-//                }
-//                if (marvelListItem.has("previous")) {
-//                    tempJSONobj = marvelListItem.getJSONObject("previous");
-//                    if (tempJSONobj.has("resourceURI")) {
-//                        marvelItem.previousURI = tempJSONobj.getString("resourceURI");
-//                    }
-//                    if (tempJSONobj.has("name")) {
-//                        marvelItem.previousName = tempJSONobj.getString("name");
-//                    }
-//                }
+                if (marvelListItem.has("next")) {
+                    tempJSONobj = marvelListItem.getJSONObject("next");
+                    if (tempJSONobj.has("resourceURI")) {
+                        marvelItem.nextURI = tempJSONobj.getString("resourceURI");
+                    }
+                    if (tempJSONobj.has("name")) {
+                        marvelItem.nextName = tempJSONobj.getString("name");
+                    }
+                }
+                if (marvelListItem.has("previous")) {
+                    tempJSONobj = marvelListItem.getJSONObject("previous");
+                    if (tempJSONobj.has("resourceURI")) {
+                        marvelItem.previousURI = tempJSONobj.getString("resourceURI");
+                    }
+                    if (tempJSONobj.has("name")) {
+                        marvelItem.previousName = tempJSONobj.getString("name");
+                    }
+                }
 
                 if (marvelListItem.has("characters")) {
                     marvelItem.characters = marvelListItem.getJSONObject("characters");
@@ -516,13 +518,14 @@ public class utils {
                 if (marvelListItem.has("events")) {
                     marvelItem.events = marvelListItem.getJSONObject("events");
                 }
-//                if (marvelListItem.has("next")) {
-//                    marvelItem.next = marvelListItem.getJSONObject("next");
-//                }
-//                if (marvelListItem.has("previous")) {
-//                    marvelItem.previous = marvelListItem.getJSONObject("previous");
-//                }
-                if (marvelItem.fullName == null) {
+                if (marvelListItem.has("next")) {
+                    marvelItem.next = marvelListItem.getJSONObject("next");
+                }
+                if (marvelListItem.has("previous")) {
+                    marvelItem.previous = marvelListItem.getJSONObject("previous");
+                }
+
+              if (marvelItem.fullName == null) {
                     if (marvelItem.name == null) {
                         if (marvelItem.title == null) {
                             marvelItem.displayName = "error";
@@ -544,6 +547,7 @@ public class utils {
                 marvelItemsList.add(marvelItem);
             }
             //Log.d(TAG, "index 10 " + marvelItemsList.get(10).name + "\nindex 11 " + marvelItemsList.get(11).name);
+
             return marvelItemsList;
         }
         catch (java.text.ParseException e) {
