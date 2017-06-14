@@ -74,7 +74,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
 
     }
 
-<<<<<<< HEAD
+
     public void getNextResults(View v) {
         Log.d(TAG, Integer.toString(totalAvailableResults));
         if (currentOffset < (totalAvailableResults - 100)) {
@@ -114,10 +114,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     public void makeApiCall() {
         updateButtons();
         String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), mCategory);
-=======
-    public void makeApiCall() {
-        String apiURL = utils.buildMarvelURL(mCategory);
->>>>>>> master
+
         Log.e(mCategory, apiURL);
 
         Bundle argsBundle = new Bundle();
@@ -140,10 +137,6 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
                         deliverResult(apiResultsJSON);
                     }
                     else {
-<<<<<<< HEAD
-=======
-                        //Set Progress Bar Visibility
->>>>>>> master
                         mLoadingIndicatorPB.setVisibility(View.VISIBLE);
                         Log.d(TAG, "AsyncTaskLoader is doing a forceload");
                         forceLoad();
