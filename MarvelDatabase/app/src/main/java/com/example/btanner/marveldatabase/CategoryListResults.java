@@ -26,6 +26,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     private ProgressBar mLoadingIndicatorPB;
     private RecyclerView mMarvelItemsRV;
     private MarvelRVAdapter mMarvelAdapter;
+    private String mCategory;
 
 
 
@@ -63,6 +64,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         Bundle argsBundle = new Bundle();
 
         argsBundle.putString(SEARCH_URL_KEY, apiURL);
+        mCategory = category;
         getSupportLoaderManager().restartLoader(MARVEL_SEARCH_LOADER_ID, argsBundle, this);
     }
 
@@ -120,9 +122,15 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         if (data != null) {
             mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
             mMarvelItemsRV.setVisibility(View.VISIBLE);
-            ArrayList<utils.MarvelItem> marvelItems = utils.parseMarvelItemJSON(data);
-            //Log.d(TAG, "Items in parse JSON: " + Integer.toString(marvelItems.size()));
-            mMarvelAdapter.updateMarvelItems(marvelItems);
+            if(utils.parseMarvelItemJSON(data) == null){
+                Log.d(TAG, "null parse JSON");
+            }
+            else {
+                ArrayList<utils.MarvelItem> marvelItems = utils.parseMarvelItemJSON(data);
+
+                //Log.d(TAG, "Items in parse JSON: " + Integer.toString(marvelItems.size()));
+                mMarvelAdapter.updateMarvelItems(marvelItems, mCategory);
+            }
         }
         else {
             mMarvelItemsRV.setVisibility(View.INVISIBLE);
@@ -135,6 +143,5 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     public void onLoaderReset(Loader<String> loader) {
 
     }
-
 
 }

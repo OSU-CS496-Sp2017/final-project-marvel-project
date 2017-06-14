@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //if (!TextUtils.isEmpty(searchQuery)) {
-                    doCharacters(v);
+                doCharacters(v);
                 //}
             }
         });

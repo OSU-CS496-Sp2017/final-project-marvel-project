@@ -302,12 +302,14 @@ public class utils {
             JSONArray marvelList = marvelObj.getJSONArray("results");
             ArrayList<MarvelItem> marvelItemsList = new ArrayList<MarvelItem>();
             SimpleDateFormat dateParser = new SimpleDateFormat(MARVEL_DATE_FORMAT);
-            MarvelItem marvelItem;
+
             JSONObject tempJSONobj;
             JSONArray tempJSONarr;
 
             for (int i = 0; i < marvelList.length(); ++i) {
-                marvelItem = new MarvelItem();
+
+                MarvelItem marvelItem = new MarvelItem();   //problem here
+
                 JSONObject marvelListItem = marvelList.getJSONObject(i);
                 if (marvelListItem.has("id")) {
                     marvelItem.id = marvelListItem.getInt("id");
@@ -469,7 +471,6 @@ public class utils {
                         marvelItem.seriesName = tempJSONobj.getString("name");
                     }
                 }
-
                 if (marvelListItem.has("thumbnail")) {
                     tempJSONobj = marvelListItem.getJSONObject("thumbnail");
                     if (tempJSONobj.has("path") && tempJSONobj.has("extension")) {
@@ -523,7 +524,8 @@ public class utils {
                 if (marvelListItem.has("previous")) {
                     marvelItem.previous = marvelListItem.getJSONObject("previous");
                 }
-                if (marvelItem.fullName == null) {
+
+              if (marvelItem.fullName == null) {
                     if (marvelItem.name == null) {
                         if (marvelItem.title == null) {
                             marvelItem.displayName = "error";
@@ -544,14 +546,18 @@ public class utils {
                 }
                 marvelItemsList.add(marvelItem);
             }
+            //Log.d(TAG, "index 10 " + marvelItemsList.get(10).name + "\nindex 11 " + marvelItemsList.get(11).name);
+
             return marvelItemsList;
         }
         catch (java.text.ParseException e) {
             e.printStackTrace();
+            Log.d(TAG, "Expection 1" + e);
             return null;
         }
         catch (JSONException e) {
             e.printStackTrace();
+            Log.d(TAG, "Expection 2" + e);
             return null;
         }
 
@@ -922,10 +928,5 @@ public class utils {
             e.printStackTrace();
             return null;
         }
-
-
     }
-
-
-
 }
