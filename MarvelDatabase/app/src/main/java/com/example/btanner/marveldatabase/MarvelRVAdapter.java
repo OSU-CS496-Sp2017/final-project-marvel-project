@@ -87,8 +87,9 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
             else if(mCategory.equals("stories")){
                 mMarvelItemTV.setText(marvelItem.title);
             }
-            else
+            else {
                 mMarvelItemTV.setText("Error");
+            }
         }
 
         public void onClick(View v) {
