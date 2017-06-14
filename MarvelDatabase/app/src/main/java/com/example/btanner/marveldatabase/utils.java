@@ -39,6 +39,11 @@ public class utils {
     private static final String MARVEL_HASH_QUERY_PARAM = "hash";
     private static final String MARVEL_DATE_FORMAT1 = "yyyy-MM-dd'T'HH:mm:ssZ";
     private static final String MARVEL_DATE_FORMAT2 = "yyyy-MM-dd HH:mm:ss";
+    private static final String MARVEL_LIMIT_QUERY_PARAM = "limit";
+    private static final String MARVEL_ITEM_LIMIT = "100";
+    private static final String MARVEL_OFFSET_QUERY_PARAM = "offset";
+
+
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -264,30 +269,36 @@ public class utils {
 
 
 
-    public static String buildMarvelURL(String category) {
+    public static String buildMarvelURL(String offset, String category) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, MARVEL_ITEM_LIMIT)
+                .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
                 .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
                 .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
                 .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
                 .build()
                 .toString();
     }
-    public static String buildMarvelURL(String category, String id) {
+    public static String buildMarvelURL(String offset, String category, String id) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category)
                 .appendPath(id)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, MARVEL_ITEM_LIMIT)
+                .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
                 .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
                 .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
                 .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
                 .build()
                 .toString();
     }
-    public static String buildMarvelURL(String category1, String id, String category2) {
+    public static String buildMarvelURL(String offset, String category1, String id, String category2) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category1)
                 .appendPath(id)
                 .appendPath(category2)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, MARVEL_ITEM_LIMIT)
+                .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
                 .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
                 .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
                 .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
@@ -420,7 +431,7 @@ public class utils {
                             } else if (tempJSONobj.getString("type").equals("comiclink")) {
                                 marvelItem.comiclinkURL = tempJSONobj.getString("url");
                             } else {
-                                Log.d(TAG, "Found unexpected type in urls when parsing comic JSON");
+                                Log.d(TAG, "Found unexpected type in urls when parsing comic JSON: " + tempJSONobj.getString("type"));
                             }
                         }
                     }
@@ -436,7 +447,7 @@ public class utils {
                             } else if (tempJSONobj.getString("type").equals("focDate")) {
                                 marvelItem.focDate = dateParser1.parse(tempJSONobj.getString("date"));
                             } else {
-                                Log.d(TAG, "Found unexpected type in dates when parsing comic JSON");
+                                Log.d(TAG, "Found unexpected type in dates when parsing comic JSON: " + tempJSONobj.getString("type"));
                             }
                         }
                     }
@@ -451,7 +462,7 @@ public class utils {
                             } else if (tempJSONobj.getString("type").equals("digitalPurchasePrice")) {
                                 marvelItem.digitalPurchasePrice = (float) tempJSONobj.getDouble("price");
                             } else {
-                                Log.d(TAG, "Found unexpected type in prices when parsing comic JSON");
+                                Log.d(TAG, "Found unexpected type in prices when parsing comic JSON: " + tempJSONobj.getString("type"));
                             }
                         }
                     }

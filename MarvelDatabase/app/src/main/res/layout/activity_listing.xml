@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <Button
+            android:id="@+id/btn_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:onClick="getPrevResults"
+            android:clickable="false"
+            android:alpha="0.5"
+            android:text="@string/str_previous" />
+        <EditText
+            android:id="@+id/txt_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:hint="@string/str_type_to_filter"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_next"
+            android:onClick="getNextResults"
+            android:layout_gravity="end"/>
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -28,6 +59,8 @@
             android:layout_margin="32dp"
             android:layout_gravity="top|center_horizontal"
             android:visibility="invisible"/>
+
+
     </FrameLayout>
 
 </LinearLayout>

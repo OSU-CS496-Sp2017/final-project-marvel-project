@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Marvel Database</string>
     <string name="loading_error_message">We couldn\'t load your query. Please check your internet connection and try again.</string>
+    <string name="str_next">Next</string>
+    <string name="str_previous">Previous</string>
+    <string name="str_type_to_filter">Type to filter...</string>
 </resources>
