@@ -47,7 +47,6 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         currentOffset = 0;
         totalAvailableResults = 0;
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
-        makeApiCall();
 
 
         mLoadingErrorMessageTV = (TextView) findViewById(R.id.tv_loading_error_message);
