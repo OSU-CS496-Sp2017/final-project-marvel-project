@@ -52,63 +52,63 @@ public class utils {
     }
 
     public static class MarvelItem implements Serializable {
-        public static JSONObject next;
-        public static JSONObject previous;
-        public static Date start;
-        public static Date end;
-        public static String nextURI;
-        public static String nextName;
-        public static String previousURI;
-        public static String previousName;
-        public static String firstName;
-        public static String middleName;
-        public static String lastName;
-        public static String suffix;
-        public static String fullName;
-        public static String type;
-        public static String originalIssueUri;
-        public static String originalIssueName;
-        public static int startYear;
-        public static int endYear;
-        public static String rating;
-        public static JSONObject comics;
-        public static JSONObject series;
-        public static String wikiURL;
-        public static String comiclinkURL;
-        public static int id;
-        public static String name;
-        public static int digitalId;
-        public static String title;
-        public static double issueNumber;
-        public static String variantDescription;
-        public static String description;
-        public static Date modified;
-        public static String isbn;
-        public static String upc;
-        public static String diamondCode;
-        public static String ean;
-        public static String issn;
-        public static String format;
-        public static int pageCount;
-        public static JSONArray textObjects;
-        public static String resourceURI;
-        public static String detailURL;
-        public static String seriesURI;
-        public static String seriesName;
-        public static JSONArray variants;
-        public static JSONArray collections;
-        public static JSONArray collectedIssues;
-        public static Date onsaleDate;
-        public static Date focDate;
-        public static float printPrice;
-        public static float digitalPurchasePrice;
-        public static String thumbnailPath;
-        public static JSONArray images;
-        public static JSONObject creators;
-        public static JSONObject characters;
-        public static JSONObject stories;
-        public static JSONObject events;
-        public static String displayName;
+        public JSONObject next;
+        public JSONObject previous;
+        public Date start;
+        public Date end;
+        public String nextURI;
+        public String nextName;
+        public String previousURI;
+        public String previousName;
+        public String firstName;
+        public String middleName;
+        public String lastName;
+        public String suffix;
+        public String fullName;
+        public String type;
+        public String originalIssueUri;
+        public String originalIssueName;
+        public int startYear;
+        public int endYear;
+        public String rating;
+        public JSONObject comics;
+        public JSONObject series;
+        public String wikiURL;
+        public String comiclinkURL;
+        public int id;
+        public String name;
+        public int digitalId;
+        public String title;
+        public double issueNumber;
+        public String variantDescription;
+        public String description;
+        public Date modified;
+        public String isbn;
+        public String upc;
+        public String diamondCode;
+        public String ean;
+        public String issn;
+        public String format;
+        public int pageCount;
+        public JSONArray textObjects;
+        public String resourceURI;
+        public String detailURL;
+        public String seriesURI;
+        public String seriesName;
+        public JSONArray variants;
+        public JSONArray collections;
+        public JSONArray collectedIssues;
+        public Date onsaleDate;
+        public Date focDate;
+        public float printPrice;
+        public float digitalPurchasePrice;
+        public String thumbnailPath;
+        public JSONArray images;
+        public JSONObject creators;
+        public JSONObject characters;
+        public JSONObject stories;
+        public JSONObject events;
+        public String displayName;
 
     }
 
@@ -305,10 +305,11 @@ public class utils {
 
             JSONObject tempJSONobj;
             JSONArray tempJSONarr;
+            MarvelItem marvelItem;
 
             for (int i = 0; i < marvelList.length(); ++i) {
 
-                MarvelItem marvelItem = new MarvelItem();   //problem here
+                marvelItem = new MarvelItem();
 
                 JSONObject marvelListItem = marvelList.getJSONObject(i);
                 if (marvelListItem.has("id")) {

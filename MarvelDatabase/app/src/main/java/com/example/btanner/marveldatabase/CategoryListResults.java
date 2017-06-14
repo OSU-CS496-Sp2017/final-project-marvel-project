@@ -127,8 +127,9 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
             }
             else {
                 ArrayList<utils.MarvelItem> marvelItems = utils.parseMarvelItemJSON(data);
-
-                //Log.d(TAG, "Items in parse JSON: " + Integer.toString(marvelItems.size()));
+//                for (int i = 0; i < marvelItems.size(); i++) {
+//                    Log.d(TAG, "item " + Integer.toString(i) + ": " + marvelItems.get(i).displayName);
+//                }
                 mMarvelAdapter.updateMarvelItems(marvelItems, mCategory);
             }
         }
