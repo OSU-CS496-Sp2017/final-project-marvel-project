@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_filter_entries">
+        <item>Test1</item>
+        <item>Test2</item>
+        <item>Test3</item>
+    </string-array>
+    <string-array name="pref_filter_values">
+        <item>Test1</item>
+        <item>Test2</item>
+        <item>Test3</item>
+    </string-array>
+
+
+
+</resources>
