@@ -52,10 +52,6 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
 
     }
 
-    @Override
-    public void onMarvellItemClick(utils.MarvelItem marvelItem) {
-
-    }
 
     public void makeApiCall(String category) {
         String apiURL = utils.buildMarvelURL(category);
