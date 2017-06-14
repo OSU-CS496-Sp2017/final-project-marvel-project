@@ -8,10 +8,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,10 +32,14 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     private static final int MARVEL_SEARCH_LOADER_ID = 0;
 
     private TextView mLoadingErrorMessageTV;
+    private EditText txtFilter;
+    private Button btnNext, btnPrev, btnFilter;
     private ProgressBar mLoadingIndicatorPB;
     private RecyclerView mMarvelItemsRV;
     private MarvelRVAdapter mMarvelAdapter;
     private String mCategory;
+    private int currentOffset;
+    private int totalAvailableResults;
 
 
 
@@ -36,16 +49,29 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         setContentView(R.layout.activity_listing);
 
         Intent intent = getIntent();
-        String category = intent.getStringExtra(MainActivity.CATEGORY_MESSAGE);
-
+        mCategory = intent.getStringExtra(MainActivity.CATEGORY_MESSAGE);
+        currentOffset = 0;
+        totalAvailableResults = 0;
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
-        makeApiCall(category);
+
 
         mLoadingErrorMessageTV = (TextView) findViewById(R.id.tv_loading_error_message);
         mLoadingIndicatorPB = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         mMarvelItemsRV = (RecyclerView) findViewById(R.id.rv_marvel_items);
+        btnNext = (Button) findViewById(R.id.btn_next);
+        btnPrev = (Button) findViewById(R.id.btn_prev);
+        btnFilter = (Button) findViewById(R.id.btn_filter);
+        txtFilter = (EditText) findViewById(R.id.txt_filter);
+
+
+
+        getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
+        makeApiCall();
+
+
 
         mMarvelAdapter = new MarvelRVAdapter(this);
+        mMarvelAdapter.setContext(this);
         mMarvelItemsRV.setAdapter(mMarvelAdapter);
         mMarvelItemsRV.setLayoutManager(new LinearLayoutManager(this));
         mMarvelItemsRV.setHasFixedSize(true);
@@ -53,14 +79,75 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     }
 
 
-    public void makeApiCall(String category) {
-        String apiURL = utils.buildMarvelURL(category);
-        Log.e(category, apiURL);
+
+    public void getNextResults(View v) {
+        Log.d(TAG, Integer.toString(totalAvailableResults));
+        if (currentOffset < (totalAvailableResults - 100)) {
+            currentOffset += 100;
+            makeApiCall();
+        }
+    }
+
+    public void getPrevResults(View v) {
+        if (currentOffset >= 100) {
+            currentOffset -= 100;
+            makeApiCall();
+        }
+    }
+
+    private void updateButtons() {
+        if ((currentOffset >= 100)) {
+            btnPrev.setClickable(true);
+            btnPrev.setAlpha(1.0f);
+            if (currentOffset < (totalAvailableResults - 100)) {
+                btnNext.setClickable(true);
+                btnNext.setAlpha(1.0f);
+            }
+            else {
+                btnNext.setClickable(false);
+                btnNext.setAlpha(.5f);
+            }
+        }
+        else {
+            btnPrev.setClickable(false);
+            btnPrev.setAlpha(.5f);
+        }
+    }
+
+    public void doFilter() {
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.categorylistresults, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+    public void makeApiCall() {
+        updateButtons();
+        String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), mCategory);
+
+        Log.e(mCategory, apiURL);
 
         Bundle argsBundle = new Bundle();
 
         argsBundle.putString(SEARCH_URL_KEY, apiURL);
-        mCategory = category;
         getSupportLoaderManager().restartLoader(MARVEL_SEARCH_LOADER_ID, argsBundle, this);
     }
 
@@ -78,7 +165,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
                         deliverResult(apiResultsJSON);
                     }
                     else {
-                        //Set Progress Bar Visibility
+                        mLoadingIndicatorPB.setVisibility(View.VISIBLE);
                         Log.d(TAG, "AsyncTaskLoader is doing a forceload");
                         forceLoad();
                     }
@@ -93,10 +180,20 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
                     String searchResults = null;
                     try {
                         searchResults = NetworkUtils.doHTTPGet(marvelUrl);
+                        JSONObject tempJSONObj = new JSONObject(searchResults);
+                        JSONObject tempJSONobjData = tempJSONObj.getJSONObject("data");
+                        if (!tempJSONobjData.isNull("total")) {
+                            totalAvailableResults = tempJSONobjData.getInt("total");
+                        }
+
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    Log.e("RESULTS", searchResults);
+
+
+                    //Log.e("RESULTS", searchResults);
                     return searchResults;
                 } else {
                     return null;
@@ -133,7 +230,6 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
             mMarvelItemsRV.setVisibility(View.INVISIBLE);
             mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -141,4 +237,8 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
 
     }
 
+    @Override
+    public void onMarvellItemClick(utils.MarvelItem marvelItem) {
+
+    }
 }
