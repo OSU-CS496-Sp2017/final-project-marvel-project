@@ -1,56 +1,37 @@
 package com.example.btanner.marveldatabase;
 
+import android.content.Intent;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CategoryListResults extends AppCompatActivity implements MarvelRVAdapter.OnMarvelItemClickListener, LoaderManager.LoaderCallbacks<String> {
-
+public class MarvelItemDetails extends AppCompatActivity
+        implements MarvelRVAdapter.OnMarvelItemClickListener, LoaderManager.LoaderCallbacks<String>{
     private static final String TAG = CategoryListResults.class.getSimpleName();
     private static final String SEARCH_URL_KEY = "marvelSearchURL";
     private static final int MARVEL_SEARCH_LOADER_ID = 0;
-
-    private TextView mLoadingErrorMessageTV;
-    private ProgressBar mLoadingIndicatorPB;
-    private RecyclerView mMarvelItemsRV;
-    private MarvelRVAdapter mMarvelAdapter;
     private String mCategory;
-
+    private String mItemId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listing);
+        setContentView(R.layout.activity_marvel_item_details);
 
         Intent intent = getIntent();
-        mCategory = intent.getStringExtra(MainActivity.CATEGORY_MESSAGE);
+        mCategory = intent.getStringExtra(MarvelRVAdapter.ITEM_CATEGORY);
+        mItemId = intent.getStringExtra(MarvelRVAdapter.ITEM_ID);
 
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
         makeApiCall();
-
-        mLoadingErrorMessageTV = (TextView) findViewById(R.id.tv_loading_error_message);
-        mLoadingIndicatorPB = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-        mMarvelItemsRV = (RecyclerView) findViewById(R.id.rv_marvel_items);
-
-        mMarvelAdapter = new MarvelRVAdapter(this);
-        mMarvelAdapter.setContext(this);
-        mMarvelItemsRV.setAdapter(mMarvelAdapter);
-        mMarvelItemsRV.setLayoutManager(new LinearLayoutManager(this));
-        mMarvelItemsRV.setHasFixedSize(true);
-
     }
 
     @Override
@@ -59,7 +40,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     }
 
     public void makeApiCall() {
-        String apiURL = utils.buildMarvelURL(mCategory);
+        String apiURL = utils.buildMarvelURL(mCategory, mItemId);
         Log.e(mCategory, apiURL);
 
         Bundle argsBundle = new Bundle();
@@ -83,7 +64,6 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
                     }
                     else {
                         //Set Progress Bar Visibility
-                        mLoadingIndicatorPB.setVisibility(View.VISIBLE);
                         Log.d(TAG, "AsyncTaskLoader is doing a forceload");
                         forceLoad();
                     }
@@ -119,24 +99,25 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
         Log.d(TAG, "AsyncTaskLoader's onLoadFinished called");
-        mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
+        //mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
         if (data != null) {
-            mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
-            mMarvelItemsRV.setVisibility(View.VISIBLE);
+           // mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
+           // mMarvelItemsRV.setVisibility(View.VISIBLE);
             if(utils.parseMarvelItemJSON(data) == null){
                 Log.d(TAG, "null parse JSON");
             }
             else {
                 ArrayList<utils.MarvelItem> marvelItems = utils.parseMarvelItemJSON(data);
+                Log.e("ITEM", "" + marvelItems);
 //                for (int i = 0; i < marvelItems.size(); i++) {
 //                    Log.d(TAG, "item " + Integer.toString(i) + ": " + marvelItems.get(i).displayName);
 //                }
-                mMarvelAdapter.updateMarvelItems(marvelItems, mCategory);
+               // mMarvelAdapter.updateMarvelItems(marvelItems, mCategory);
             }
         }
         else {
-            mMarvelItemsRV.setVisibility(View.INVISIBLE);
-            mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
+           // mMarvelItemsRV.setVisibility(View.INVISIBLE);
+           // mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
         }
 
     }
