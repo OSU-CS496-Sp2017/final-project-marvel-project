@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".CategoryListResults" />
-        <activity android:name=".MarvelItemDetails"></activity>
+        <activity android:name=".MarvelItemDetails" />
+        <activity android:name=".SettingsActivity" />
     </application>
 
 </manifest>

@@ -8,9 +8,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,7 +32,8 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     private static final int MARVEL_SEARCH_LOADER_ID = 0;
 
     private TextView mLoadingErrorMessageTV;
-    private Button btnNext, btnPrev;
+    private EditText txtFilter;
+    private Button btnNext, btnPrev, btnFilter;
     private ProgressBar mLoadingIndicatorPB;
     private RecyclerView mMarvelItemsRV;
     private MarvelRVAdapter mMarvelAdapter;
@@ -54,6 +60,10 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         mMarvelItemsRV = (RecyclerView) findViewById(R.id.rv_marvel_items);
         btnNext = (Button) findViewById(R.id.btn_next);
         btnPrev = (Button) findViewById(R.id.btn_prev);
+        btnFilter = (Button) findViewById(R.id.btn_filter);
+        txtFilter = (EditText) findViewById(R.id.txt_filter);
+
+
 
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
         makeApiCall();
@@ -105,6 +115,29 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         else {
             btnPrev.setClickable(false);
             btnPrev.setAlpha(.5f);
+        }
+    }
+
+    public void doFilter() {
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.categorylistresults, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -164,7 +197,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
                     }
 
 
-                    Log.e("RESULTS", searchResults);
+                    //Log.e("RESULTS", searchResults);
                     return searchResults;
                 } else {
                     return null;
