@@ -46,6 +46,9 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         mCategory = intent.getStringExtra(MainActivity.CATEGORY_MESSAGE);
         currentOffset = 0;
         totalAvailableResults = 0;
+        getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
+        makeApiCall();
+
 
         mLoadingErrorMessageTV = (TextView) findViewById(R.id.tv_loading_error_message);
         mLoadingIndicatorPB = (ProgressBar) findViewById(R.id.pb_loading_indicator);
@@ -59,6 +62,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
 
 
         mMarvelAdapter = new MarvelRVAdapter(this);
+        mMarvelAdapter.setContext(this);
         mMarvelItemsRV.setAdapter(mMarvelAdapter);
         mMarvelItemsRV.setLayoutManager(new LinearLayoutManager(this));
         mMarvelItemsRV.setHasFixedSize(true);
@@ -70,6 +74,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
 
     }
 
+<<<<<<< HEAD
     public void getNextResults(View v) {
         Log.d(TAG, Integer.toString(totalAvailableResults));
         if (currentOffset < (totalAvailableResults - 100)) {
@@ -109,6 +114,10 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     public void makeApiCall() {
         updateButtons();
         String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), mCategory);
+=======
+    public void makeApiCall() {
+        String apiURL = utils.buildMarvelURL(mCategory);
+>>>>>>> master
         Log.e(mCategory, apiURL);
 
         Bundle argsBundle = new Bundle();
@@ -131,6 +140,10 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
                         deliverResult(apiResultsJSON);
                     }
                     else {
+<<<<<<< HEAD
+=======
+                        //Set Progress Bar Visibility
+>>>>>>> master
                         mLoadingIndicatorPB.setVisibility(View.VISIBLE);
                         Log.d(TAG, "AsyncTaskLoader is doing a forceload");
                         forceLoad();
@@ -202,5 +215,4 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     public void onLoaderReset(Loader<String> loader) {
 
     }
-
 }

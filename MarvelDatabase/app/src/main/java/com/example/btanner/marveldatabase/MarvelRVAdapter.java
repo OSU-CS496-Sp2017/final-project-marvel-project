@@ -1,5 +1,7 @@
 package com.example.btanner.marveldatabase;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +19,11 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
 
     private OnMarvelItemClickListener mMarvelItemClickListener;
     private ArrayList<utils.MarvelItem> mMarvelItems;
+    public static final String ITEM_ID = "ID";
+    public static final String ITEM_CATEGORY = "CATEGORY";
 
     private String mCategory;
-
+    private Context mContext;
 
 
     public interface OnMarvelItemClickListener {
@@ -28,6 +32,10 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
 
     public MarvelRVAdapter (OnMarvelItemClickListener clickListener) {
         mMarvelItemClickListener = clickListener;
+    }
+
+    public void setContext(Context context) {
+        mContext = context;
     }
 
     public void updateMarvelItems(ArrayList<utils.MarvelItem> marvelItems, String category) {
@@ -95,8 +103,11 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
         public void onClick(View v) {
             utils.MarvelItem marvelItem = mMarvelItems.get(getAdapterPosition());
             mMarvelItemClickListener.onMarvellItemClick(marvelItem);
+            Intent intent = new Intent(mContext, MarvelItemDetails.class);
+
+            intent.putExtra(ITEM_ID, String.valueOf(marvelItem.id));
+            intent.putExtra(ITEM_CATEGORY, mCategory);
+            mContext.startActivity(intent);
         }
     }
-
-
 }
