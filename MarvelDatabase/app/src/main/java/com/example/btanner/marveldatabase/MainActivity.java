@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
 import okhttp3.internal.Util;
 
 public class MainActivity extends AppCompatActivity {

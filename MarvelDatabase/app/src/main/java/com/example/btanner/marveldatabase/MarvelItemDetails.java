@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,20 +23,86 @@ public class MarvelItemDetails extends AppCompatActivity
     private String mItemId;
     private int currentOffset;
     private SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(CategoryListResults.getContextOfApplication());
+    private ArrayList<utils.MarvelItem> marvelItems;
+    private utils.MarvelItem marvelItem;
 
+    private TextView mTitleTV;
+    private TextView mModifiedTV;
+    private TextView mDescriptionTV;
+    private TextView mDetailsTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marvel_item_details);
 
+        mTitleTV = (TextView)findViewById(R.id.tv_title);
+        mModifiedTV = (TextView)findViewById(R.id.tv_modified);
+        mDescriptionTV = (TextView)findViewById(R.id.tv_description);
+        mDetailsTV = (TextView)findViewById(R.id.tv_details);
+
         Intent intent = getIntent();
-        mCategory = intent.getStringExtra(MarvelRVAdapter.ITEM_CATEGORY);
-        mItemId = intent.getStringExtra(MarvelRVAdapter.ITEM_ID);
+
         currentOffset = 0;
 
+        Bundle extras = intent.getExtras();
+        mItemId = extras.getString(utils.MarvelItem.EXTRA_MARVEL_ID);
+        mCategory = extras.getString(utils.MarvelItem.EXTRA_MARVEL_CATEGORY);
+
+
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
+        Log.d(TAG, "id: " + mItemId + " cat: " + mCategory);
+
         makeApiCall();
+
+    }
+
+    public void showDetails(){
+        Log.d(TAG, "SHOW DETAILS");
+        if(mCategory.equals("characters")) {
+            mTitleTV.setText(marvelItem.name);
+            mModifiedTV.setText("Modifed Date:\n\t" + marvelItem.modified);
+            mDescriptionTV.setText("Descrition: " +  marvelItem.description);
+            mDetailsTV.setText("more details:\t" + marvelItem.detailURL +
+                     "\ncomic link:\t" + marvelItem.comiclinkURL +
+                     "\nwiki:\t" + marvelItem.wikiURL);
+        }
+        else if(mCategory.equals("comics")) {
+            mTitleTV.setText(marvelItem.title);
+            mModifiedTV.setText("Modifed Date:\n\t" + marvelItem.modified);
+            mDescriptionTV.setText("On Sale Date:\n\t" + marvelItem.onsaleDate +
+                                    "\nFoc Date:\n\t" + marvelItem.focDate);
+            mDetailsTV.setText("more details:\t" + marvelItem.detailURL);
+        }
+        else if(mCategory.equals("creators")) {
+            mTitleTV.setText(marvelItem.fullName);
+            mModifiedTV.setText("Modifed Date:\n\t" + marvelItem.modified);
+            mDescriptionTV.setText("");
+            mDetailsTV.setText("more details:\t" + marvelItem.detailURL);
+        }
+        else if(mCategory.equals("events")) {
+            mTitleTV.setText(marvelItem.title);
+            mModifiedTV.setText("Modifed Date:\n\t" + marvelItem.modified);
+            mDescriptionTV.setText("Descrition: " +  marvelItem.description);
+            mDetailsTV.setText("Start Date:\n\t" + marvelItem.start +
+                                "\nEnd Date:\n\t" + marvelItem.end);
+        }
+        else if(mCategory.equals("series")) {
+            mTitleTV.setText(marvelItem.title);
+            mModifiedTV.setText("Modifed Date:\n\t" + marvelItem.modified);
+            mDescriptionTV.setText("Descrition: " +  marvelItem.description);
+            mDetailsTV.setText("Start Year:\t" + marvelItem.startYear +
+                                "\nEnd Year:\t" + marvelItem.endYear);
+        }
+        else if(mCategory.equals("stories")){
+            mTitleTV.setText(marvelItem.title);
+            mModifiedTV.setText("Modifed Date:\n\t" + marvelItem.modified);
+            mDescriptionTV.setText("Descrition: " +  marvelItem.description);
+            mDetailsTV.setText("Original Issue Name:\t" + marvelItem.originalIssueName);
+        }
+        else {
+            mTitleTV.setText("Error");
+        }
 
     }
 
@@ -48,6 +114,7 @@ public class MarvelItemDetails extends AppCompatActivity
     public void makeApiCall() {
         String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), sharedPreferences.getString("pref_limit_key", "20"),
                 sharedPreferences.getString("pref_order_key", "name"), mCategory, mItemId);
+
         Log.e(mCategory, apiURL);
 
         Bundle argsBundle = new Bundle();
@@ -114,12 +181,14 @@ public class MarvelItemDetails extends AppCompatActivity
                 Log.d(TAG, "null parse JSON");
             }
             else {
-                ArrayList<utils.MarvelItem> marvelItems = utils.parseMarvelItemJSON(data);
-                Log.e("ITEM", "" + marvelItems);
-//                for (int i = 0; i < marvelItems.size(); i++) {
-//                    Log.d(TAG, "item " + Integer.toString(i) + ": " + marvelItems.get(i).displayName);
-//                }
-               // mMarvelAdapter.updateMarvelItems(marvelItems, mCategory);
+                marvelItems = utils.parseMarvelItemJSON(data);
+                marvelItem = marvelItems.get(0);
+                Log.e("ITEM SIZE ", "" + marvelItems.size());
+                for (int i = 0; i < marvelItems.size(); i++) {
+                    Log.d(TAG, "item " + Integer.toString(i) + ": " + marvelItem.name);
+                }
+                showDetails();
+                // mMarvelAdapter.updateMarvelItems(marvelItems, mCategory);
             }
         }
         else {
