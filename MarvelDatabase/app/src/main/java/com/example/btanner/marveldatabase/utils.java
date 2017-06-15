@@ -30,8 +30,8 @@ import okhttp3.Response;
  */
 
 public class utils {
-    private static final String MARVEL_PRIVATE_API_KEY = "52e53b9e89995ea3ae812c0f406bfc081b7fc467";
-    private static final String MARVEL_PUBLIC_API_KEY = "a6c7351eb420be9ea7fdf9966d59e4ce";
+    private static final String MARVEL_PRIVATE_API_KEY = "49fad242a08c0baba5c9504675cb884ca1c04582";
+    private static final String MARVEL_PUBLIC_API_KEY = "ef1255ac8bfd65d1e1efe9d3086e05a0";
 
     private static final String MARVEL_BASE_URL = "https://gateway.marvel.com:443/v1/public/";
     private static final String MARVEL_APIKEY_QUERY_PARAM = "apikey";
@@ -58,6 +58,8 @@ public class utils {
     }
 
     public static class MarvelItem implements Serializable {
+        public static final String EXTRA_MARVEL_ID = "marvel.id";
+        public static final String EXTRA_MARVEL_CATEGORY = "marvel.category";
         public JSONObject next;
         public JSONObject previous;
         public Date start;
@@ -79,15 +81,15 @@ public class utils {
         public String rating;
         public JSONObject comics;
         public JSONObject series;
-        public String wikiURL;
-        public String comiclinkURL;
+        public String wikiURL = "";
+        public String comiclinkURL = "";
         public int id;
         public String name;
         public int digitalId;
         public String title;
         public double issueNumber;
         public String variantDescription;
-        public String description;
+        public String description = "";
         public Date modified;
         public String isbn;
         public String upc;
@@ -98,7 +100,7 @@ public class utils {
         public int pageCount;
         public JSONArray textObjects;
         public String resourceURI;
-        public String detailURL;
+        public String detailURL = "";
         public String seriesURI;
         public String seriesName;
         public JSONArray variants;

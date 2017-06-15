@@ -25,11 +25,6 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
     private String mCategory;
     private Context mContext;
 
-
-    public interface OnMarvelItemClickListener {
-        void onMarvellItemClick(utils.MarvelItem marvelItem);
-    }
-
     public MarvelRVAdapter (OnMarvelItemClickListener clickListener) {
         mMarvelItemClickListener = clickListener;
     }
@@ -67,6 +62,9 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
         holder.bind(mMarvelItems.get(position));
     }
 
+    public interface OnMarvelItemClickListener {
+        void onMarvellItemClick(utils.MarvelItem marvelItem);
+    }
 
     class MarvelItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView mMarvelItemTV;
@@ -103,11 +101,12 @@ public class MarvelRVAdapter extends RecyclerView.Adapter<MarvelRVAdapter.Marvel
         public void onClick(View v) {
             utils.MarvelItem marvelItem = mMarvelItems.get(getAdapterPosition());
             mMarvelItemClickListener.onMarvellItemClick(marvelItem);
-            Intent intent = new Intent(mContext, MarvelItemDetails.class);
-
-            intent.putExtra(ITEM_ID, String.valueOf(marvelItem.id));
-            intent.putExtra(ITEM_CATEGORY, mCategory);
-            mContext.startActivity(intent);
+            Log.d("Adapter", "on clikc in adapter ");
+//            Intent intent = new Intent(mContext, MarvelItemDetails.class);
+//
+//            intent.putExtra(ITEM_ID, String.valueOf(marvelItem.id));
+//            intent.putExtra(ITEM_CATEGORY, mCategory);
+//            mContext.startActivity(intent);
         }
     }
 }
