@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +43,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     private int totalAvailableResults;
     private static Context contextOfApplication;
     private SharedPreferences sharedPreferences;
+    private String filter;
 
 
     @Override
@@ -126,10 +125,9 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         }
     }
 
-    public void doFilter() {
-
-
-
+    public void doFilter(View v) {
+        filter = txtFilter.getText().toString();
+        makeFilteredApiCall();
     }
 
     @Override
@@ -150,15 +148,115 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         }
     }
 
-
-
-
-
     public void makeApiCall() {
         updateButtons();
-        String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), sharedPreferences.getString("pref_limit_key", "20"),
-                sharedPreferences.getString("pref_order_key", "name"), mCategory);
+        String order = sharedPreferences.getString("pref_order_key", "name");
+        if (((order.equals("name")) || (order.equals("-name")))) {
+            if (mCategory.equals("characters") || mCategory.equals("events")) {
+                //nothing needs to be done
+            }
+            else if (mCategory.equals("comics") || mCategory.equals("series")) {
+                if (order.equals("name")) {
+                    order = "title";
+                }
+                else if (order.equals("-name")) {
+                    order = "-title";
+                }
+                else {
+                    Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+                }
+            }
+            else if (mCategory.equals("creators")) {
+                if (order.equals("name")) {
+                    order = "lastName";
+                }
+                else if (order.equals("-name")) {
+                    order = "-lastName";
+                }
+                else {
+                    Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+                }
 
+            }
+            else if (mCategory.equals("stories")) {
+                if (order.equals("name")) {
+                    order = "id";
+                }
+                else if (order.equals("-name")) {
+                    order = "-id";
+                }
+                else {
+                    Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+                }
+
+            }
+            else {
+                Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+            }
+        }
+
+        String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), sharedPreferences.getString("pref_limit_key", "20"),
+                    order, mCategory);
+
+        Log.e(mCategory, apiURL);
+
+        Bundle argsBundle = new Bundle();
+
+        argsBundle.putString(SEARCH_URL_KEY, apiURL);
+        getSupportLoaderManager().restartLoader(MARVEL_SEARCH_LOADER_ID, argsBundle, this);
+    }
+
+
+
+
+    public void makeFilteredApiCall() {
+        updateButtons();
+        String order = sharedPreferences.getString("pref_order_key", "name");
+        if (((order.equals("name")) || (order.equals("-name")))) {
+            if (mCategory.equals("characters") || mCategory.equals("events")) {
+                //nothing needs to be done
+            }
+            else if (mCategory.equals("comics") || mCategory.equals("series")) {
+                if (order.equals("name")) {
+                    order = "title";
+                }
+                else if (order.equals("-name")) {
+                    order = "-title";
+                }
+                else {
+                    Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+                }
+            }
+            else if (mCategory.equals("creators")) {
+                if (order.equals("name")) {
+                    order = "lastName";
+                }
+                else if (order.equals("-name")) {
+                    order = "-lastName";
+                }
+                else {
+                    Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+                }
+
+            }
+            else if (mCategory.equals("stories")) {
+                if (order.equals("name")) {
+                    order = "id";
+                }
+                else if (order.equals("-name")) {
+                    order = "-id";
+                }
+                else {
+                    Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+                }
+
+            }
+            else {
+                Log.d(TAG, "Problem determining appropriate name/title orderBy query param in makeApiCall");
+            }
+        }
+        String apiURL = utils.buildFilteredMarvelURL(Integer.toString(currentOffset), sharedPreferences.getString("pref_limit_key", "20"),
+                    order, filter, mCategory);
         Log.e(mCategory, apiURL);
 
         Bundle argsBundle = new Bundle();

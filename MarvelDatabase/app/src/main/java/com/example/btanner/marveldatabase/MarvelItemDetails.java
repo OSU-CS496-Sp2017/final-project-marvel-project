@@ -112,8 +112,7 @@ public class MarvelItemDetails extends AppCompatActivity
     }
 
     public void makeApiCall() {
-        String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), sharedPreferences.getString("pref_limit_key", "20"),
-                sharedPreferences.getString("pref_order_key", "name"), mCategory, mItemId);
+        String apiURL = utils.buildMarvelURL(mCategory, mItemId);
 
         Log.e(mCategory, apiURL);
 

@@ -285,13 +285,10 @@ public class utils {
                 .build()
                 .toString();
     }
-    public static String buildMarvelURL(String offset, String limit, String order, String category, String id) {
+    public static String buildMarvelURL(String category, String id) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category)
                 .appendPath(id)
-                .appendQueryParameter(MARVEL_ORDER_QUERY_PARAM, order)
-                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, limit)
-                .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
                 .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
                 .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
                 .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
@@ -303,6 +300,56 @@ public class utils {
                 .appendPath(category1)
                 .appendPath(id)
                 .appendPath(category2)
+                .appendQueryParameter(MARVEL_ORDER_QUERY_PARAM, order)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, limit)
+                .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
+                .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
+                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
+                .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
+                .build()
+                .toString();
+    }
+
+    public static String buildFilteredMarvelURL(String offset, String limit, String order, String filter, String category) {
+        String filterQueryParam;
+        if ((category.equals("characters")) || (category.equals("creators")) || (category.equals("events"))){
+            filterQueryParam = "nameStartsWith";
+        } else if (category.equals("comics")|| (category.equals("series"))) {
+            filterQueryParam = "titleStartsWith";
+        } else {
+            Log.d(TAG, "Unexpected category at buildFilteredMarvelURL");
+            filterQueryParam = "nameStartsWith";
+        }
+
+        return Uri.parse(MARVEL_BASE_URL).buildUpon()
+                .appendPath(category)
+                .appendQueryParameter(filterQueryParam, filter)
+                .appendQueryParameter(MARVEL_ORDER_QUERY_PARAM, order)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, limit)
+                .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
+                .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
+                .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
+                .appendQueryParameter(MARVEL_HASH_QUERY_PARAM, calculateHash())
+                .build()
+                .toString();
+    }
+
+    public static String buildFilteredMarvelURL(String offset, String limit, String order, String filter, String category1, String id, String category2) {
+        String filterQueryParam;
+        if ((category2.equals("characters")) || (category2.equals("creators")) || (category2.equals("events"))){
+            filterQueryParam = "nameStartsWith";
+        } else if (category2.equals("comics")|| (category2.equals("series"))) {
+            filterQueryParam = "titleStartsWith";
+        } else {
+            Log.d(TAG, "Unexpected category at buildFilteredMarvelURL");
+            filterQueryParam = "nameStartsWith";
+        }
+
+        return Uri.parse(MARVEL_BASE_URL).buildUpon()
+                .appendPath(category1)
+                .appendPath(id)
+                .appendPath(category2)
+                .appendQueryParameter(filterQueryParam, filter)
                 .appendQueryParameter(MARVEL_ORDER_QUERY_PARAM, order)
                 .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, limit)
                 .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
