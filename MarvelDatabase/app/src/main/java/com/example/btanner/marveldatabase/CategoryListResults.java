@@ -1,11 +1,14 @@
 package com.example.btanner.marveldatabase;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -25,7 +28,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CategoryListResults extends AppCompatActivity implements MarvelRVAdapter.OnMarvelItemClickListener, LoaderManager.LoaderCallbacks<String> {
+public class CategoryListResults extends AppCompatActivity implements MarvelRVAdapter.OnMarvelItemClickListener, LoaderManager.LoaderCallbacks<String>, SettingsFragment.OnPreferencesChange {
 
     private static final String TAG = CategoryListResults.class.getSimpleName();
     private static final String SEARCH_URL_KEY = "marvelSearchURL";
@@ -40,7 +43,8 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     private String mCategory;
     private int currentOffset;
     private int totalAvailableResults;
-
+    private static Context contextOfApplication;
+    private SharedPreferences sharedPreferences;
 
 
     @Override
@@ -53,6 +57,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         currentOffset = 0;
         totalAvailableResults = 0;
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
+        contextOfApplication = getApplicationContext();
 
 
         mLoadingErrorMessageTV = (TextView) findViewById(R.id.tv_loading_error_message);
@@ -62,6 +67,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         btnPrev = (Button) findViewById(R.id.btn_prev);
         btnFilter = (Button) findViewById(R.id.btn_filter);
         txtFilter = (EditText) findViewById(R.id.txt_filter);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
 
@@ -76,6 +82,10 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
         mMarvelItemsRV.setLayoutManager(new LinearLayoutManager(this));
         mMarvelItemsRV.setHasFixedSize(true);
 
+    }
+
+    public static Context getContextOfApplication() {
+        return contextOfApplication;
     }
 
     @Override
@@ -121,6 +131,7 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     public void doFilter() {
 
 
+
     }
 
     @Override
@@ -143,9 +154,12 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
 
 
 
+
+
     public void makeApiCall() {
         updateButtons();
-        String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), mCategory);
+        String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), sharedPreferences.getString("pref_limit_key", "20"),
+                sharedPreferences.getString("pref_order_key", "name"), mCategory);
 
         Log.e(mCategory, apiURL);
 
@@ -239,5 +253,11 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
     @Override
     public void onLoaderReset(Loader<String> loader) {
 
+    }
+
+    @Override
+    public void onPreferencesChange() {
+        //makeApiCall();
+        Log.d(TAG, "called");
     }
 }

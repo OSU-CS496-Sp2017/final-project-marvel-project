@@ -1,11 +1,13 @@
 package com.example.btanner.marveldatabase;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -19,6 +21,8 @@ public class MarvelItemDetails extends AppCompatActivity
     private static final int MARVEL_SEARCH_LOADER_ID = 0;
     private String mCategory;
     private String mItemId;
+    private int currentOffset;
+    private SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(CategoryListResults.getContextOfApplication());
 
 
     @Override
@@ -29,9 +33,11 @@ public class MarvelItemDetails extends AppCompatActivity
         Intent intent = getIntent();
         mCategory = intent.getStringExtra(MarvelRVAdapter.ITEM_CATEGORY);
         mItemId = intent.getStringExtra(MarvelRVAdapter.ITEM_ID);
+        currentOffset = 0;
 
         getSupportLoaderManager().initLoader(MARVEL_SEARCH_LOADER_ID, null, this);
         makeApiCall();
+
     }
 
     @Override
@@ -40,7 +46,8 @@ public class MarvelItemDetails extends AppCompatActivity
     }
 
     public void makeApiCall() {
-        String apiURL = utils.buildMarvelURL(mCategory, mItemId);
+        String apiURL = utils.buildMarvelURL(Integer.toString(currentOffset), sharedPreferences.getString("pref_limit_key", "20"),
+                sharedPreferences.getString("pref_order_key", "name"), mCategory, mItemId);
         Log.e(mCategory, apiURL);
 
         Bundle argsBundle = new Bundle();

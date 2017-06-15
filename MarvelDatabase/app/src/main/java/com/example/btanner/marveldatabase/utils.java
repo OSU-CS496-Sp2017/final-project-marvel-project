@@ -1,7 +1,9 @@
 package com.example.btanner.marveldatabase;
 
+import android.content.SharedPreferences;
 import android.net.ParseException;
 import android.net.Uri;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import org.apache.commons.codec.binary.Hex;
@@ -40,8 +42,8 @@ public class utils {
     private static final String MARVEL_DATE_FORMAT1 = "yyyy-MM-dd'T'HH:mm:ssZ";
     private static final String MARVEL_DATE_FORMAT2 = "yyyy-MM-dd HH:mm:ss";
     private static final String MARVEL_LIMIT_QUERY_PARAM = "limit";
-    private static final String MARVEL_ITEM_LIMIT = "100";
     private static final String MARVEL_OFFSET_QUERY_PARAM = "offset";
+    private static final String MARVEL_ORDER_QUERY_PARAM = "orderBy";
 
 
 
@@ -269,10 +271,11 @@ public class utils {
 
 
 
-    public static String buildMarvelURL(String offset, String category) {
+    public static String buildMarvelURL(String offset, String limit, String order, String category) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category)
-                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, MARVEL_ITEM_LIMIT)
+                .appendQueryParameter(MARVEL_ORDER_QUERY_PARAM, order)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, limit)
                 .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
                 .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
                 .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
@@ -280,11 +283,12 @@ public class utils {
                 .build()
                 .toString();
     }
-    public static String buildMarvelURL(String offset, String category, String id) {
+    public static String buildMarvelURL(String offset, String limit, String order, String category, String id) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category)
                 .appendPath(id)
-                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, MARVEL_ITEM_LIMIT)
+                .appendQueryParameter(MARVEL_ORDER_QUERY_PARAM, order)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, limit)
                 .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
                 .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
                 .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)
@@ -292,12 +296,13 @@ public class utils {
                 .build()
                 .toString();
     }
-    public static String buildMarvelURL(String offset, String category1, String id, String category2) {
+    public static String buildMarvelURL(String offset, String limit, String order, String category1, String id, String category2) {
         return Uri.parse(MARVEL_BASE_URL).buildUpon()
                 .appendPath(category1)
                 .appendPath(id)
                 .appendPath(category2)
-                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, MARVEL_ITEM_LIMIT)
+                .appendQueryParameter(MARVEL_ORDER_QUERY_PARAM, order)
+                .appendQueryParameter(MARVEL_LIMIT_QUERY_PARAM, limit)
                 .appendQueryParameter(MARVEL_OFFSET_QUERY_PARAM, offset)
                 .appendQueryParameter(MARVEL_TS_QUERY_PARAM, Long.toString(System.currentTimeMillis()))
                 .appendQueryParameter(MARVEL_APIKEY_QUERY_PARAM, MARVEL_PUBLIC_API_KEY)

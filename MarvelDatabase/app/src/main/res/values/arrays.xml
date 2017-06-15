@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="pref_filter_entries">
-        <item>Test1</item>
-        <item>Test2</item>
-        <item>Test3</item>
+    <string-array name="pref_order_entries">
+        <item>By name</item>
+        <item>By last modified</item>
+        <item>By name (reversed)</item>
+        <item>By last modified (revered)</item>
     </string-array>
-    <string-array name="pref_filter_values">
-        <item>Test1</item>
-        <item>Test2</item>
-        <item>Test3</item>
+    <string-array name="pref_order_values">
+        <item>name</item>
+        <item>modified</item>
+        <item>-name</item>
+        <item>-modified</item>
     </string-array>
+    <string-array name="pref_limit_entries">
+        <item>20</item>
+        <item>40</item>
+        <item>60</item>
+        <item>80</item>
+        <item>1000</item>
+    </string-array>
+    <string-array name="pref_limit_values">
+        <item>20</item>
+        <item>40</item>
+        <item>60</item>
+        <item>80</item>
+        <item>100</item>
+    </string-array>
+
 
 
 
