@@ -239,6 +239,14 @@ public class CategoryListResults extends AppCompatActivity implements MarvelRVAd
 
     @Override
     public void onMarvellItemClick(utils.MarvelItem marvelItem) {
+        Log.d(TAG, "on item click in category list result " + marvelItem.id);
 
+        Intent intent = new Intent(this, MarvelItemDetails.class);
+
+        Bundle extras = new Bundle();
+        extras.putString(utils.MarvelItem.EXTRA_MARVEL_ID,String.valueOf(marvelItem.id));
+        extras.putString(utils.MarvelItem.EXTRA_MARVEL_CATEGORY,mCategory);
+        intent.putExtras(extras);
+        startActivity(intent);
     }
 }
